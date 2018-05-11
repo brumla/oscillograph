@@ -30,4 +30,43 @@ void DlgPortSetup::initializeDialogData()
     for(QSerialPortInfo port : ports) {
         ui->cbPort->addItem(QString("%1 (%2)").arg(port.portName()).arg(port.description()), port.portName());
     }
+
+    ui->cbSpeed->clear();
+    ui->cbSpeed->addItem(QString(), QVariant());
+    ui->cbSpeed->addItem(tr("1200"), QSerialPort::Baud1200);
+    ui->cbSpeed->addItem(tr("2400"), QSerialPort::Baud2400);
+    ui->cbSpeed->addItem(tr("4800"), QSerialPort::Baud4800);
+    ui->cbSpeed->addItem(tr("9600"), QSerialPort::Baud9600);
+    ui->cbSpeed->addItem(tr("19200"), QSerialPort::Baud19200);
+    ui->cbSpeed->addItem(tr("38400"), QSerialPort::Baud38400);
+    ui->cbSpeed->addItem(tr("57600"), QSerialPort::Baud57600);
+    ui->cbSpeed->addItem(tr("115200"), QSerialPort::Baud115200);
+
+    ui->cbParity->clear();
+    ui->cbParity->addItem(QString(), QVariant());
+    ui->cbParity->addItem(tr("None"), QSerialPort::NoParity);
+    ui->cbParity->addItem(tr("Even"), QSerialPort::EvenParity);
+    ui->cbParity->addItem(tr("Odd"), QSerialPort::OddParity);
+    ui->cbParity->addItem(tr("Space"), QSerialPort::SpaceParity);
+    ui->cbParity->addItem(tr("Mark"), QSerialPort::MarkParity);
+
+    ui->cbDataBit->clear();
+    ui->cbDataBit->addItem(QString(), QVariant());
+    ui->cbDataBit->addItem(tr("5"), QSerialPort::Data5);
+    ui->cbDataBit->addItem(tr("6"), QSerialPort::Data6);
+    ui->cbDataBit->addItem(tr("7"), QSerialPort::Data7);
+    ui->cbDataBit->addItem(tr("8"), QSerialPort::Data8);
+
+    ui->cbStopBit->clear();
+    ui->cbStopBit->addItem(QString(), QVariant());
+    ui->cbStopBit->addItem(tr("One"), QSerialPort::OneStop);
+    ui->cbStopBit->addItem(tr("One and half"), QSerialPort::OneAndHalfStop);
+    ui->cbStopBit->addItem(tr("Two"), QSerialPort::TwoStop);
+
+    ui->cbFlowControl->clear();
+    ui->cbFlowControl->addItem(QString(), QVariant());
+    ui->cbFlowControl->addItem(tr("None"), QSerialPort::NoFlowControl);
+    ui->cbFlowControl->addItem(tr("Hardware"), QSerialPort::HardwareControl);
+    ui->cbFlowControl->addItem(tr("Software"), QSerialPort::SoftwareControl);
+
 }
