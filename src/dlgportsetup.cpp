@@ -69,4 +69,36 @@ void DlgPortSetup::initializeDialogData()
     ui->cbFlowControl->addItem(tr("Hardware"), QSerialPort::HardwareControl);
     ui->cbFlowControl->addItem(tr("Software"), QSerialPort::SoftwareControl);
 
+    qDebug() << mPortSetup;
+}
+
+SerialPortSetup DlgPortSetup::portSetup() const
+{
+    return mPortSetup;
+}
+
+void DlgPortSetup::setPortSetup(const SerialPortSetup &portSetup)
+{
+    mPortSetup = portSetup;
+}
+
+void DlgPortSetup::on_buttonBox_accepted()
+{
+    mPortSetup.dataBit = ui->cbDataBit->currentData().toInt();
+    mPortSetup.flowControl = ui->cbFlowControl->currentData().toInt();
+    mPortSetup.parity = ui->cbParity->currentData().toInt();
+    mPortSetup.portName = ui->cbPort->currentData().toString();
+    mPortSetup.speed = ui->cbSpeed->currentData().toInt();
+    mPortSetup.stopBit = ui->cbStopBit->currentData().toInt();
+}
+
+QDebug operator <<(QDebug debug, const SerialPortSetup& portSetup) {
+    debug << "SerialPortSetup(portName=" << portSetup.portName
+          << ", speed=" << portSetup.speed
+          << ", parity=" << portSetup.parity
+          << ", dataBit=" << portSetup.dataBit
+          << ", stopBit=" << portSetup.stopBit
+          << ", flowControl=" << portSetup.flowControl
+          << ")";
+    return debug;
 }
