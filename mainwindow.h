@@ -17,6 +17,10 @@ public:
 
 private:
     Ui::MainWindow *ui;
+
+    QAction* mStartStop;
+    QAction* mExportCSV;
+    QAction* mPortSetup;
 };
 
 #endif // MAINWINDOW_H
