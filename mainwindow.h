@@ -3,6 +3,8 @@
 
 #include <QMainWindow>
 
+#include "src/dlgportsetup.h"
+
 namespace Ui {
 class MainWindow;
 }
@@ -25,9 +27,11 @@ private:
     QAction* mExportCSV;
     QAction* mPortSetup;
 
+    SerialPortSetup mSerialPortSetup;
+
     // QWidget interface
 protected:
-    void closeEvent(QCloseEvent *event);
+    void closeEvent(QCloseEvent *event);       
 };
 
 #endif // MAINWINDOW_H

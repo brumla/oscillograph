@@ -3,8 +3,7 @@
 
 #include <QCloseEvent>
 #include <QMessageBox>
-
-#include "src/dlgportsetup.h"
+#include <QDebug>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -18,7 +17,10 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(mPortSetup, &QAction::triggered, [=](){
         DlgPortSetup dlg;
-        dlg.exec();
+        if(dlg.exec() == QDialog::Accepted) {
+            mSerialPortSetup = dlg.portSetup();
+            qDebug() << "Port setup changed: " << mSerialPortSetup;
+        }
     });
 }
 
