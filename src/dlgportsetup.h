@@ -32,7 +32,17 @@ public:
     explicit DlgPortSetup(QWidget *parent = 0);
     ~DlgPortSetup();
 
+    ///
+    /// \brief port setup property getter
+    /// \return current port setup, if the dialog was accepted, the new setup is returned
+    ///
     SerialPortSetup portSetup() const;
+
+    ///
+    /// \brief sets the dialog entries according to port setup, if the port setup is invalid or unitialized,
+    ///        empty values are shown in all the entries
+    /// \param portSetup
+    ///
     void setPortSetup(const SerialPortSetup &portSetup);
 
 private slots:
@@ -43,10 +53,19 @@ private slots:
     ///
     void on_buttonBox_accepted();
 
+    void on_btnUseRecomended_clicked();
+
 private:
     Ui::DlgPortSetup *ui;
 
+    ///
+    /// \brief initializes all the comboboxes in the dialog with the values lists
+    ///
     void initializeDialogData();
+
+    ///
+    /// \brief current port setup, use property getter/setter for value access
+    ///
     SerialPortSetup mPortSetup;
 };
 

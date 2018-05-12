@@ -2,6 +2,8 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QSerialPort>
+#include <QSerialPortInfo>
 
 #include "src/dlgportsetup.h"
 
@@ -19,6 +21,8 @@ public:
 
 private slots:
     void on_action_Quit_triggered();
+    void on_serial_port_closing();
+    void on_serial_port_channel_finished();
 
 private:
     Ui::MainWindow *ui;
@@ -28,6 +32,7 @@ private:
     QAction* mPortSetup;
 
     SerialPortSetup mSerialPortSetup;
+    QSerialPort mSerialPort;
 
     // QWidget interface
 protected:

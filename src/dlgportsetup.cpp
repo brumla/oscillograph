@@ -81,7 +81,9 @@ void DlgPortSetup::setPortSetup(const SerialPortSetup &portSetup)
 {
     mPortSetup = portSetup;
 
-    // set the combos properly
+    // set the combos properly, if the value is not found
+    // then the position -1 is used and the combo value is just
+    // invalid QVariant
     int index = ui->cbDataBit->findData(mPortSetup.dataBit);
     ui->cbDataBit->setCurrentIndex(index);
 
@@ -103,6 +105,8 @@ void DlgPortSetup::setPortSetup(const SerialPortSetup &portSetup)
 
 void DlgPortSetup::on_buttonBox_accepted()
 {
+    // store all the combobox values into port setup structure
+    // if some value was not set, the default is stored (zero, empty string)
     mPortSetup.dataBit = ui->cbDataBit->currentData().toInt();
     mPortSetup.flowControl = ui->cbFlowControl->currentData().toInt();
     mPortSetup.parity = ui->cbParity->currentData().toInt();
@@ -120,4 +124,22 @@ QDebug operator <<(QDebug debug, const SerialPortSetup& portSetup) {
           << ", flowControl=" << portSetup.flowControl
           << ")";
     return debug;
+}
+
+void DlgPortSetup::on_btnUseRecomended_clicked()
+{
+    int index = ui->cbDataBit->findText("*", Qt::MatchContains);
+    if(index >= 0) ui->cbDataBit->setCurrentIndex(index);
+
+    index = ui->cbFlowControl->findText("*", Qt::MatchContains);
+    if(index >= 0) ui->cbFlowControl->setCurrentIndex(index);
+
+    index = ui->cbParity->findText("*", Qt::MatchContains);
+    if(index >= 0) ui->cbParity->setCurrentIndex(index);
+
+    index = ui->cbSpeed->findText("*", Qt::MatchContains);
+    if(index >= 0) ui->cbSpeed->setCurrentIndex(index);
+
+    index = ui->cbStopBit->findText("*", Qt::MatchContains);
+    if(index >= 0) ui->cbStopBit->setCurrentIndex(index);
 }

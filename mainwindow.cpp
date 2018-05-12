@@ -15,14 +15,52 @@ MainWindow::MainWindow(QWidget *parent) :
     mExportCSV = ui->mainToolBar->addAction("Export to CSV");
     mPortSetup = ui->mainToolBar->addAction("Port setup");
 
+    statusBar()->showMessage(tr("Please set up the port first."));
+
+    connect(&mSerialPort, SIGNAL(aboutToClose()), this, SLOT(on_serial_port_closing()));
+    connect(&mSerialPort, SIGNAL(readChannelFinished()), this, SLOT(on_serial_port_channel_finished()));
+
     connect(mPortSetup, &QAction::triggered, [=](){
+        // TODO Move from lambda to normal method to avoid unreadable code
         DlgPortSetup dlg;
         mSerialPortSetup.portName = "COM3";
         dlg.setPortSetup(mSerialPortSetup);
         if(dlg.exec() == QDialog::Accepted) {
             mSerialPortSetup = dlg.portSetup();
             qDebug() << "Port setup changed: " << mSerialPortSetup;
+
+            // set up serial port
+            mSerialPort.setDataBits(static_cast<QSerialPort::DataBits>(mSerialPortSetup.dataBit));
+            mSerialPort.setFlowControl(static_cast<QSerialPort::FlowControl>(mSerialPortSetup.flowControl));
+            mSerialPort.setParity(static_cast<QSerialPort::Parity>(mSerialPortSetup.parity));
+            mSerialPort.setPortName(mSerialPortSetup.portName);
+            mSerialPort.setBaudRate(static_cast<QSerialPort::BaudRate>(mSerialPortSetup.speed));
+            mSerialPort.setStopBits(static_cast<QSerialPort::StopBits>(mSerialPortSetup.stopBit));
+
+            statusBar()->showMessage(tr("Serial port setup complete"));
         }
+    });
+
+    connect(mStartStop, &QAction::triggered, [=](){
+        // TODO Move from lambda to normal method to avoid unreadable code
+
+        if(mSerialPort.isOpen()) {
+            qDebug() << "Closing port";
+            mSerialPort.close();
+        }
+
+        bool result = mSerialPort.open(QSerialPort::ReadWrite);
+        qDebug() << "The serial port open() returns: " << result;
+
+        if(!result) {
+            QMessageBox::critical(this,
+                                  tr("I/O Error"),
+                                  tr("Cannot open serial port %1").arg(mSerialPort.errorString()),
+                                  QMessageBox::Close);
+            return;
+        }
+
+        statusBar()->showMessage(tr("Serial port opened for read-write"));
     });
 }
 
@@ -34,6 +72,16 @@ MainWindow::~MainWindow()
 void MainWindow::on_action_Quit_triggered()
 {
     close();
+}
+
+void MainWindow::on_serial_port_closing()
+{
+    statusBar()->showMessage(tr("Closing port, please wait..."));
+}
+
+void MainWindow::on_serial_port_channel_finished()
+{
+    statusBar()->showMessage(tr("Serial channel closed."));
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)
