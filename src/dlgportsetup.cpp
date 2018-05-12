@@ -80,6 +80,25 @@ SerialPortSetup DlgPortSetup::portSetup() const
 void DlgPortSetup::setPortSetup(const SerialPortSetup &portSetup)
 {
     mPortSetup = portSetup;
+
+    // set the combos properly
+    int index = ui->cbDataBit->findData(mPortSetup.dataBit);
+    ui->cbDataBit->setCurrentIndex(index);
+
+    index = ui->cbFlowControl->findData(mPortSetup.flowControl);
+    ui->cbFlowControl->setCurrentIndex(index);
+
+    index = ui->cbParity->findData(mPortSetup.parity);
+    ui->cbParity->setCurrentIndex(index);
+
+    index = ui->cbPort->findData(mPortSetup.portName);
+    ui->cbPort->setCurrentIndex(index);
+
+    index = ui->cbSpeed->findData(mPortSetup.speed);
+    ui->cbSpeed->setCurrentIndex(index);
+
+    index = ui->cbStopBit->findData(mPortSetup.stopBit);
+    ui->cbStopBit->setCurrentIndex(index);
 }
 
 void DlgPortSetup::on_buttonBox_accepted()

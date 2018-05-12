@@ -17,6 +17,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(mPortSetup, &QAction::triggered, [=](){
         DlgPortSetup dlg;
+        mSerialPortSetup.portName = "COM3";
+        dlg.setPortSetup(mSerialPortSetup);
         if(dlg.exec() == QDialog::Accepted) {
             mSerialPortSetup = dlg.portSetup();
             qDebug() << "Port setup changed: " << mSerialPortSetup;
