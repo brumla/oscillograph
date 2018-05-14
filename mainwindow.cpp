@@ -84,6 +84,20 @@ void MainWindow::on_serial_port_channel_finished()
     statusBar()->showMessage(tr("Serial channel closed."));
 }
 
+void MainWindow::on_serial_port_readyRead()
+{
+    // read all the content from serial port buffer and store into the deque
+    QByteArray buffer = mSerialPort.readAll();
+    QByteArray::const_iterator itBuffer = buffer.constBegin();
+    while(itBuffer != buffer.end()) {
+        dataBuffer.push_back(*itBuffer);
+        itBuffer ++;
+        if(dataBuffer.size() > maxDataBufferSize) dataBuffer.pop_front();
+    }
+
+    // TODO: Redraw
+}
+
 void MainWindow::closeEvent(QCloseEvent *event)
 {
     int result = QMessageBox::question(this,

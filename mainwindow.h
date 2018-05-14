@@ -5,6 +5,8 @@
 #include <QSerialPort>
 #include <QSerialPortInfo>
 
+#include <deque>
+
 #include "src/dlgportsetup.h"
 
 namespace Ui {
@@ -23,6 +25,7 @@ private slots:
     void on_action_Quit_triggered();
     void on_serial_port_closing();
     void on_serial_port_channel_finished();
+    void on_serial_port_readyRead();
 
 private:
     Ui::MainWindow *ui;
@@ -33,6 +36,9 @@ private:
 
     SerialPortSetup mSerialPortSetup;
     QSerialPort mSerialPort;
+
+    std::deque<uint8_t> dataBuffer;
+    const int maxDataBufferSize = 1000;
 
     // QWidget interface
 protected:
