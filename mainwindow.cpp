@@ -97,7 +97,7 @@ void MainWindow::on_serial_port_readyRead()
     }
 
     // check the deque size, if too big then remove oldest data
-    int difference = dataBuffer.size() - maximumSize();
+    int difference = dataBuffer.size() - maxDataBufferSize;
     if(difference > 0) {
         // remove the old data
         std::deque<unsigned char>::const_iterator it = dataBuffer.cbegin();
