@@ -89,10 +89,23 @@ void MainWindow::on_serial_port_readyRead()
     // read all the content from serial port buffer and store into the deque
     QByteArray buffer = mSerialPort.readAll();
     QByteArray::const_iterator itBuffer = buffer.constBegin();
+
+    // and push back the received bytes intro deque
     while(itBuffer != buffer.end()) {
         dataBuffer.push_back(*itBuffer);
         itBuffer ++;
-        if(dataBuffer.size() > maxDataBufferSize) dataBuffer.pop_front();
+    }
+
+    // check the deque size, if too big then remove oldest data
+    int difference = dataBuffer.size() - maximumSize();
+    if(difference > 0) {
+        // remove the old data
+        std::deque<unsigned char>::const_iterator it = dataBuffer.cbegin();
+
+        while(it != dataBuffer.cend() && difference > 0) {
+            dataBuffer.pop_front();
+            difference --;
+        }
     }
 
     // TODO: Redraw
@@ -105,6 +118,12 @@ void MainWindow::closeEvent(QCloseEvent *event)
                                        tr("Do you want to quit the application?"),
                                        QMessageBox::Yes | QMessageBox::No);
     if(result == QMessageBox::Yes) {
+        // close serial port if open
+        if(mSerialPort.isOpen()) {
+            statusBar()->showMessage(tr("Closing port %1").arg(mSerialPort.portName()));
+            mSerialPort.close();
+        }
+
         event->accept();
     }
     else {
